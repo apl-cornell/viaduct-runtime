@@ -3,11 +3,12 @@
 #include <stdarg.h>
 #include <unistd.h>
 #include <set>
-#include "viaduct_runtime.h"
 
-#include <ENCRYPTO_utils/socket.h>
+#include <viaduct/Socket.h>
+#include <viaduct/ViaductRuntime.h>
 
 // ViaductProcessRuntime
+
 ViaductProcessRuntime::ViaductProcessRuntime(
     ViaductRuntime& runtime,
     pid self_id,
@@ -41,7 +42,9 @@ void ViaductProcessRuntime::operator()() {
   this->process.run(*this);
 }
 
+
 // ViaductRuntimeSenderThread
+
 ViaductRuntimeSenderThread::ViaductRuntimeSenderThread(
   CSocket* socket,
   SyncQueue<Message>* msgQueue,
@@ -71,7 +74,9 @@ void ViaductRuntimeSenderThread::operator()() {
   }
 }
 
+
 // ViaductRuntimeReceiver
+
 ViaductRuntimeReceiverThread::ViaductRuntimeReceiverThread(
   CSocket* socket,
   SyncQueue<Message>* msgQueue,
@@ -103,7 +108,9 @@ void ViaductRuntimeReceiverThread::operator()() {
   }
 }
 
+
 // ViaductRuntime
+
 ViaductRuntime::ViaductRuntime(hostid host)
   : hostMap(), channelMap(), processMap(), host(host) {}
 

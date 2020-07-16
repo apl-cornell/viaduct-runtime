@@ -6,9 +6,8 @@
 #include <thread>
 #include <vector>
 
-#include "syncqueue.h"
-
-#include <ENCRYPTO_utils/socket.h>
+#include <viaduct/Socket.h>
+#include <viaduct/SyncQueue.h>
 
 // number of times to retry connection before failing
 #define VIADUCT_CONNECTION_NUM_RETRY    100
@@ -25,9 +24,30 @@
 using hostid = uint32_t;
 using pid = int32_t;
 
-class ViaductRuntime;
-class ViaductProcess;
+class ViaductProcessRuntime;
 
+// Executes the code for the process.
+class ViaductProcess {
+public:
+  virtual void run(ViaductProcessRuntime& runtime)=0;
+};
+
+class DefaultViaductProcess: public ViaductProcess {
+  void (*procFunction)(ViaductProcessRuntime& runtime);
+
+public:
+  DefaultViaductProcess(void (*procFunction)(ViaductProcessRuntime&))
+    : procFunction(procFunction)
+  {}
+
+  void run(ViaductProcessRuntime& runtime) {
+    (*this->procFunction)(runtime);
+  }
+};
+
+class ViaductRuntime;
+
+// Runtime wrapper for a process.
 class ViaductProcessRuntime {
   ViaductRuntime& runtime;
   pid self_id;
@@ -58,10 +78,7 @@ public:
   void operator()();
 };
 
-class ViaductProcess {
-public:
-  virtual void run(ViaductProcessRuntime& runtime)=0;
-};
+// communication
 
 struct Message {
   pid sender;
@@ -69,6 +86,7 @@ struct Message {
   int value;
 };
 
+// Thread that sends data to a host socket.
 class ViaductRuntimeSenderThread {
   CSocket* socket;
   SyncQueue<Message>* msgQueue;
@@ -80,6 +98,7 @@ public:
   void operator()();
 };
 
+// Thread that receives data from a host socket.
 class ViaductRuntimeReceiverThread {
   CSocket* socket;
   SyncQueue<Message>* msgQueue;
@@ -104,6 +123,7 @@ using host_map = std::map<hostid, std::unique_ptr<HostInfo>>;
 using channel_map = std::map<pid, std::map<pid, std::unique_ptr<SyncQueue<int>>>>;
 using process_map = std::map<pid, std::unique_ptr<ViaductProcessRuntime>>;
 
+// Manages host registry, process registry, and communication b/w processes.
 class ViaductRuntime {
   hostid host;
   host_map hostMap;
@@ -129,6 +149,5 @@ public:
 
   bool run();
 };
-
 
 #endif

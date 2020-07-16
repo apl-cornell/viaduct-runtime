@@ -16,8 +16,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
  \brief		Socket Implementation
  */
 
-#include "socket.h"
-#include "utils.h"
+#include <viaduct/Socket.h>
 
 
 #include <cstdint>
