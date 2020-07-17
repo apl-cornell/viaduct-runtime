@@ -32,11 +32,11 @@ public:
   virtual void run(ViaductProcessRuntime& runtime)=0;
 };
 
-class DefaultViaductProcess: public ViaductProcess {
+class ViaductDefaultProcess: public ViaductProcess {
   void (*procFunction)(ViaductProcessRuntime& runtime);
 
 public:
-  DefaultViaductProcess(void (*procFunction)(ViaductProcessRuntime&))
+  ViaductDefaultProcess(void (*procFunction)(ViaductProcessRuntime&))
     : procFunction(procFunction)
   {}
 

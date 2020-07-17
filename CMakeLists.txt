@@ -11,10 +11,14 @@ project(
   LANGUAGES CXX
 )
 
-find_package(Boost REQUIRED)
+# make sure we link to pthreads
+SET(CMAKE_CXX_FLAGS -pthread)
+
+find_package(Boost REQUIRED COMPONENTS system)
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 
 add_subdirectory(src)
+add_subdirectory(tests)
