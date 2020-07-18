@@ -4,16 +4,13 @@ if(${CMAKE_VERSION} VERSION_LESS 3.12)
     cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
 endif()
 
-project(
-  Viaduct
+project(viaduct
   VERSION 1.0
   DESCRIPTION "Runtime library for the Viaduct compiler"
   LANGUAGES CXX
 )
 
-# make sure we link to pthreads
-SET(CMAKE_CXX_FLAGS -pthread)
-
+find_package(Threads REQUIRED)
 find_package(Boost REQUIRED COMPONENTS system)
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)

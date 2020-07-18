@@ -6,8 +6,8 @@
 #include <thread>
 #include <vector>
 
-#include <viaduct/Socket.h>
 #include <viaduct/SyncQueue.h>
+#include <viaduct/Socket.h>
 
 // number of times to retry connection before failing
 #define VIADUCT_CONNECTION_NUM_RETRY    100
